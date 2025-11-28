@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Found Items</h2>
+<ul class="list-group">
+{% for i in items %}
+  <li class="list-group-item"><a href="/items/{{ i.item_code }}/">{{ i.item_code }} - {{ i.title }}</a> <span class="badge bg-info">{{ i.status }}</span></li>
+{% empty %}<li class="list-group-item">None</li>{% endfor %}
+</ul>
+{% endblock %}

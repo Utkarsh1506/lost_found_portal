@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Claims</h2>
+<ul class="list-group">
+{% for c in claims %}
+  <li class="list-group-item"><a href="/claims/my/{{ c.claim_id }}/">Claim {{ c.claim_id }} - {{ c.item.item_code }}</a> <span class="badge bg-warning">{{ c.status }}</span></li>
+{% empty %}<li class="list-group-item">None</li>{% endfor %}
+</ul>
+{% endblock %}

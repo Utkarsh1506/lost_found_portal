@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ item.title }} <small class="text-muted">{{ item.item_code }}</small></h2>
+<p>{{ item.description }}</p>
+<ul class="list-group mb-3">
+  <li class="list-group-item">Type: {{ item.item_type }}</li>
+  <li class="list-group-item">Status: <span class="badge bg-info">{{ item.status }}</span></li>
+  <li class="list-group-item">Color: {{ item.color }}</li>
+  <li class="list-group-item">Category: {{ item.category }}</li>
+  {% if item.item_type == 'LOST' %}<li class="list-group-item">Location Lost: {{ item.location_lost }}</li>{% endif %}
+  {% if item.item_type == 'FOUND' %}<li class="list-group-item">Location Found: {{ item.location_found }}</li>{% endif %}
+</ul>
+{% if can_claim %}
+<a href="/items/{{ item.item_code }}/claim/" class="btn btn-success">Claim this item</a>
+{% endif %}
+{% endblock %}

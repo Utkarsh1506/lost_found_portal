@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Admin Claim Review {{ claim.claim_id }}</h2>
+<p>Item: <a href="/items/{{ item.item_code }}/">{{ item.item_code }}</a> - {{ item.title }}</p>
+<p>Claimant: {{ claim.claimant.username }}</p>
+<p>Status: <span class="badge bg-info">{{ claim.status }}</span></p>
+<p>Description: {{ claim.description }}</p>
+{% if claim.proof_text %}<p>Proof Text: {{ claim.proof_text }}</p>{% endif %}
+{% if claim.proof_file %}<p><a href="{{ claim.proof_file.url }}">Download Proof File</a></p>{% endif %}
+{% if claim.status == 'PENDING' %}
+<form method="post" class="mt-3">{% csrf_token %}
+  <button name="action" value="approve" class="btn btn-success">Approve</button>
+  <button name="action" value="reject" class="btn btn-danger">Reject</button>
+</form>
+{% endif %}
+{% endblock %}

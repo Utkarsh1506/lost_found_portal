@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Item {{ item.item_code }}</h2>
+<ul class="list-group mb-3">
+  <li class="list-group-item">Title: {{ item.title }}</li>
+  <li class="list-group-item">Type: {{ item.item_type }}</li>
+  <li class="list-group-item">Status: {{ item.status }}</li>
+  <li class="list-group-item">Reporter: {{ item.reported_by }}</li>
+  <li class="list-group-item">Handled By: {{ item.handled_by }}</li>
+</ul>
+<a href="/staff/items/{{ item.item_code }}/update-status/" class="btn btn-warning">Update Status</a>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Claim {{ claim.claim_id }}</h2>
+<p>Item: <a href="/items/{{ claim.item.item_code }}/">{{ claim.item.item_code }}</a></p>
+<p>Status: <span class="badge bg-info">{{ claim.status }}</span></p>
+<p>Description: {{ claim.description }}</p>
+{% if claim.proof_text %}<p>Proof: {{ claim.proof_text }}</p>{% endif %}
+{% if claim.proof_file %}<p><a href="{{ claim.proof_file.url }}">Download Proof File</a></p>{% endif %}
+{% endblock %}
