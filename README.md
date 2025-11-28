@@ -1,24 +1,132 @@
 # Lost and Found System
 
-A centralized digital platform for reporting, tracking, and recovering misplaced items within an institution or community.
+A centralized digital platform for reporting, tracking, and recovering misplaced items within an institution or community space. This system replaces manual registers and informal communication with a structured, data-driven, and user-friendly solution.
 
-## Features
+## 🎯 Project Overview
 
+The **Lost and Found System** is designed to help users report, track, and recover misplaced items efficiently. It provides a complete workflow from reporting lost/found items to verification and handover through a secure claim process.
+
+### Key Objectives
+- Report lost items easily with detailed information
+- Submit found items with proper documentation
+- Track the status of submissions in real-time
+- Verify ownership through a secure workflow
+- Automated notifications for status updates
+- Admin panel for complete management
+
+## ✨ Features
+
+### User Features
 - **User Dashboard**: View lost items, found items, claims, and notifications
 - **Item Reporting**: Report lost or found items with detailed information
 - **Auto-Generated Tracking IDs**: Each item gets a unique code (e.g., LF-20251128-0001)
-- **Claims System**: Users can claim found items with proof
-- **Admin Verification**: Staff can review and approve/reject claims
+- **Claims System**: Users can claim found items with proof upload
 - **Search & Filter**: Browse items by category, type, status, color, date range
-- **Notifications**: Users receive updates when items are matched, claimed, or returned
-- **Role-Based Access**: Different dashboards for Students, Staff, and Admins
+- **Notifications**: Real-time updates when items are matched, claimed, or returned
+- **Photo Upload**: Attach images to item reports
+
+### Admin Features
+- **Admin Verification**: Staff can review and approve/reject claims
+- **Dashboard Analytics**: View statistics (total items, open items, pending claims, returned items)
+- **Item Management**: Update item status and assign handlers
+- **Claims Review**: Review proof documents and approve/reject claims
+- **User Management**: Manage user roles and permissions
 
 ## Tech Stack
 
-- **Backend**: Django 4.2.7
-- **Frontend**: HTML, CSS, Bootstrap 5
-- **Database**: SQLite (development)
-- **Python**: 3.14
+- **Backend**: Django 4.2.7 (Python Web Framework)
+- **Frontend**: HTML5, CSS3, Bootstrap 5.3.2
+- **Database**: SQLite (development) / PostgreSQL (production ready)
+- **Icons**: Font Awesome 6.4.0
+- **Python**: 3.8+
+- **Additional**: Pillow 10.1.0 (Image processing)
+
+## 👥 User Roles & Access Control
+
+The system supports four different user roles with varying levels of access:
+
+### 1. STUDENT (Regular User)
+- Report lost items
+- Submit found items
+- Create claims for found items
+- Track own submissions
+- View notifications
+
+### 2. STAFF (Limited Admin)
+- All STUDENT features
+- Basic admin access
+
+### 3. ADMIN (Full Administrator)
+- Review and approve/reject claims
+- Update item statuses
+- Manage all items and claims
+- View dashboard statistics
+- Assign handlers to items
+
+### 4. SUPERADMIN
+- Full system access
+- User management
+- Database administration
+- System configuration
+
+## 📊 Database Models
+
+### User Model (accounts.User)
+```python
+- username, email, password (inherited from AbstractUser)
+- role: STUDENT, STAFF, ADMIN, SUPERADMIN
+- department: CharField (optional)
+- phone: CharField (optional)
+- is_verified: BooleanField
+```
+
+### ItemCategory Model (lostfound.ItemCategory)
+```python
+- name: CharField (unique)
+- slug: SlugField (auto-generated)
+- description: TextField (optional)
+- is_active: BooleanField
+```
+
+### Item Model (lostfound.Item)
+```python
+- item_code: Auto-generated (LF-YYYYMMDD-XXXX)
+- title, category, color, brand
+- item_type: LOST or FOUND
+- description: TextField
+- location_lost/location_found: CharField
+- date_lost/date_found: DateField
+- photo: FileField (upload)
+- status: OPEN, MATCHED, UNDER_VERIFICATION, RETURNED, CLOSED, REJECTED
+- reported_by: ForeignKey to User
+- handled_by: ForeignKey to User (admin, optional)
+- created_at, updated_at: DateTime
+```
+
+### Claim Model (claims.Claim)
+```python
+- claim_id: AutoField
+- item: ForeignKey to Item
+- claimant: ForeignKey to User
+- claim_type: OWNER_CLAIM, WRONG_CLAIM
+- description: TextField
+- proof_text: TextField (optional)
+- proof_file: FileField (optional)
+- status: PENDING, APPROVED, REJECTED, CANCELLED
+- reviewed_by: ForeignKey to User (admin)
+- reviewed_at: DateTime
+- created_at: DateTime
+```
+
+### Notification Model (notifications.Notification)
+```python
+- user: ForeignKey to User
+- title: CharField
+- message: TextField
+- link: CharField (internal URL)
+- is_read: BooleanField
+- created_at: DateTime
+```
 
 ## Setup
 
