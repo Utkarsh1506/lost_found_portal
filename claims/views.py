@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib import messages
 from .models import Claim
 from .forms import ClaimForm
 from lostfound.models import Item
@@ -16,6 +17,7 @@ def create_claim_for_item(request, item_code):
             claim.item = item
             claim.claimant = request.user
             claim.save()
+            messages.success(request, 'Your claim has been submitted and is now pending review.')
             notify_user(item.reported_by, 'New Claim Submitted', f'A claim was submitted for item {item.item_code}.', f'/claims/my/{claim.claim_id}/')
             return redirect('claim_detail', claim_id=claim.claim_id)
     else:
@@ -62,11 +64,13 @@ def admin_claim_detail(request, claim_id):
             item.handled_by = request.user
             claim.save(); item.save()
             notify_user(claim.claimant, 'Claim Approved', f'Your claim {claim.claim_id} for item {item.item_code} was approved.', f'/items/{item.item_code}/')
+            messages.success(request, f'Claim {claim.claim_id} has been approved and item marked as RETURNED.')
         elif action == 'reject':
             claim.status = 'REJECTED'
             claim.reviewed_by = request.user
             claim.reviewed_at = timezone.now()
             claim.save()
             notify_user(claim.claimant, 'Claim Rejected', f'Your claim {claim.claim_id} for item {item.item_code} was rejected.', f'/claims/my/{claim.claim_id}/')
+            messages.error(request, f'Claim {claim.claim_id} has been rejected.')
         return redirect('admin_claim_detail', claim_id=claim.claim_id)
     return render(request, 'claims/admin_claim_detail.html', {'claim': claim, 'item': item})

@@ -5,6 +5,7 @@ from .models import Item, ItemCategory
 from .forms import LostItemForm, FoundItemForm
 from claims.models import Claim
 from django.utils import timezone
+from django.contrib import messages
 
 @login_required
 def report_lost_item(request):
@@ -15,6 +16,7 @@ def report_lost_item(request):
             item.item_type = 'LOST'
             item.reported_by = request.user
             item.save()
+            messages.success(request, f'Lost item reported successfully. Tracking code: {item.item_code}.')
             return redirect('item_detail', item_code=item.item_code)
     else:
         form = LostItemForm()
@@ -29,6 +31,7 @@ def report_found_item(request):
             item.item_type = 'FOUND'
             item.reported_by = request.user
             item.save()
+            messages.success(request, f'Found item submitted successfully. Tracking code: {item.item_code}.')
             return redirect('item_detail', item_code=item.item_code)
     else:
         form = FoundItemForm()
@@ -114,5 +117,8 @@ def admin_update_item_status(request, item_code):
             item.status = new_status
             item.handled_by = request.user
             item.save()
+            messages.success(request, f'Item {item.item_code} status updated to {new_status}.')
+        else:
+            messages.error(request, 'Invalid status selected.')
         return redirect('admin_item_detail', item_code=item.item_code)
     return render(request, 'lostfound/admin_item_update_status.html', {'item': item, 'choices': Item.STATUS_CHOICES})

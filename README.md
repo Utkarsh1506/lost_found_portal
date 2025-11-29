@@ -130,43 +130,66 @@ The system supports four different user roles with varying levels of access:
 
 ## Setup
 
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+- Git (for cloning)
+
+### Installation Steps
+
 ```powershell
-# Navigate to project
+# 1. Navigate to project directory
 cd c:\Users\Admin\Desktop\lost_found_portal
 
-# Create and activate virtual environment
+# 2. Create and activate virtual environment
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
-# Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# Apply migrations
+# 4. Apply database migrations
 python manage.py migrate
 
-# Create superuser
+# 5. Create a superuser account
 python manage.py createsuperuser
 
-# Create sample categories (optional)
+# 6. (Optional) Create sample categories
 python manage.py shell
 ```
 
-In the Django shell:
+**In Django shell:**
 ```python
 from lostfound.models import ItemCategory
-ItemCategory.objects.create(name='Electronics', description='Phones, laptops, etc.')
-ItemCategory.objects.create(name='Documents', description='IDs, certificates, etc.')
-ItemCategory.objects.create(name='Accessories', description='Bags, wallets, keys, etc.')
-ItemCategory.objects.create(name='Clothing', description='Jackets, shoes, etc.')
+ItemCategory.objects.create(name='Electronics', description='Phones, laptops, tablets, etc.')
+ItemCategory.objects.create(name='Documents', description='IDs, certificates, papers, etc.')
+ItemCategory.objects.create(name='Accessories', description='Bags, wallets, keys, jewelry, etc.')
+ItemCategory.objects.create(name='Clothing', description='Jackets, shoes, hats, etc.')
+ItemCategory.objects.create(name='Books', description='Textbooks, notebooks, etc.')
 exit()
 ```
 
-Run the server:
+**Start the development server:**
 ```powershell
 python manage.py runserver
 ```
 
-Access at http://127.0.0.1:8000/
+**Access the application:**
+- Main site: http://127.0.0.1:8000/
+- Django Admin: http://127.0.0.1:8000/admin/
+
+### Quick Start Script
+For faster setup, use the included PowerShell script:
+```powershell
+.\start.ps1
+```
+This script will automatically:
+- Create/activate virtual environment
+- Install dependencies
+- Run migrations
+- Prompt to create superuser
+- Prompt to create sample categories
+- Start the development server
 
 ## User Roles
 
